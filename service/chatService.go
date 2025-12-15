@@ -182,6 +182,21 @@ func (s *ChatService) GetChatByID(chatID uint, userID uint) (*model.Chat, error)
 	return &chat, nil
 }
 
+// GetChatParticipants retrieves the participants of a chat without authorization check (internal use only)
+func (s *ChatService) GetChatParticipants(chatID uint) (uint, uint, error) {
+	var chat model.Chat
+	// Select only the user IDs to be efficient
+	err := s.DB.Select("user1_id", "user2_id").First(&chat, chatID).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return 0, 0, errors.New("chat not found")
+		}
+		return 0, 0, fmt.Errorf("error retrieving chat participants: %v", err)
+	}
+
+	return chat.User1ID, chat.User2ID, nil
+}
+
 // GetUnreadNotifications gets unread message notifications for a user
 func (s *ChatService) GetUnreadNotifications(userID uint) ([]map[string]interface{}, error) {
 	var notifications []map[string]interface{}

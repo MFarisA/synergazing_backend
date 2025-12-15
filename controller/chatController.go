@@ -275,21 +275,26 @@ func (ctrl *ChatController) sendError(userID uint, errorMsg string) {
 }
 
 func (ctrl *ChatController) broadcastToChat(chatID uint, msg WebSocketMessage) {
-	// Get chat to find both users
-	// We need to find which users are in this chat
-	// For now, we'll broadcast to all connected users and let them filter
-	// In a production app, you'd want to maintain a chat->users mapping
+	// 1. Get the chat participants from the database ONCE
+	user1ID, user2ID, err := ctrl.ChatService.GetChatParticipants(chatID)
+	if err != nil {
+		log.Printf("Error getting chat participants for broadcast: %v", err)
+		return
+	}
 
-	ctrl.mutex.RLock()
-	defer ctrl.mutex.RUnlock()
+	// 2. Identify target users
+	targets := []uint{user1ID, user2ID}
 
-	for userID, conn := range ctrl.connections {
-		if conn != nil {
-			// Check if user has access to this chat
-			if ctrl.ChatService.UserHasAccessToChat(chatID, userID) {
-				if err := conn.WriteJSON(msg); err != nil {
-					log.Printf("Error broadcasting to user %d: %v", userID, err)
-				}
+	// 3. Send to targets if they are connected
+	for _, targetID := range targets {
+		ctrl.mutex.RLock()
+		conn, exists := ctrl.connections[targetID]
+		ctrl.mutex.RUnlock()
+
+		if exists && conn != nil {
+			// No need to check access again, we just fetched them from the chat record itself
+			if err := conn.WriteJSON(msg); err != nil {
+				log.Printf("Error broadcasting to user %d: %v", targetID, err)
 			}
 		}
 	}

@@ -42,7 +42,7 @@ func ConnectEnvDBConfig() {
 	})
 
 	if err != nil {
-		log.Fatalf("Failed to Connect Database")
+		log.Fatalf("Failed to Connect Database: %v", err)
 	}
 	log.Println("Succesfull Connect to Database")
 
