@@ -38,3 +38,4 @@ storage/*
 !storage/profiles/.gitkeep
 !storage/posts/.gitkeep
 !storage/temp/.gitkeep
+initialize.sh
