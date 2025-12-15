@@ -16,14 +16,14 @@ services:
 
   db:
     image: postgres:15-alpine
-    container_name: synergazing-db-dev 
+    container_name: synergazing-db-dev
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     volumes:
-      - postgres-data-dev:/var/lib/postgresql/data 
+      - postgres-data-dev:/var/lib/postgresql/data
     networks:
       - caddy_net_external
 
