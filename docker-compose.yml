@@ -13,7 +13,7 @@ services:
 
   db:
     image: postgres:15-alpine
-    container_name: synergazing-db
+    container_name: synergazing-db 
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${DB_USER}
