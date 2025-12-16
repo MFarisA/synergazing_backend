@@ -13,6 +13,8 @@ services:
         limits:
           cpus: '0.20'
           memory: 80M
+    volumes:
+      - backend-storage-dev:/root/storage
 
   db:
     image: postgres:15-alpine
