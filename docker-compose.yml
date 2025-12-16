@@ -11,11 +11,17 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.50'
-          memory: 512M
+          cpus: '0.20'
+          memory: 80M
 
   db:
     image: postgres:15-alpine
+    command: postgres -c 'shared_buffers=24MB' -c 'max_connections=20'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 256M
     container_name: synergazing-db-dev
     restart: unless-stopped
     environment:
