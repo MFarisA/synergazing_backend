@@ -8,9 +8,19 @@ services:
       - db
     networks:
       - caddy_net_external
-
+    deploy:
+      resources:
+        limits:
+          cpus: '0.40'
+          memory: 128M
   db:
     image: postgres:15-alpine
+    command: postgres -c 'shared_buffers=64MB' -c 'max_connections=50'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.60'
+          memory: 512M
     container_name: synergazing-db-prod
     restart: unless-stopped
     environment:
