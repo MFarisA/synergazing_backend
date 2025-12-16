@@ -13,6 +13,8 @@ services:
         limits:
           cpus: '0.40'
           memory: 128M
+    volumes:
+      - backend-storage-prod:/root/storage
   db:
     image: postgres:15-alpine
     command: postgres -c 'shared_buffers=64MB' -c 'max_connections=50'
