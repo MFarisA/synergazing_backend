@@ -8,15 +8,12 @@ services:
       - db
     networks:
       - caddy_net_external
-    deploy:
-      resources:
-        limits:
-          cpus: '0.40'
-          memory: 128M
     volumes:
       - backend-storage-prod:/root/storage
+
   db:
     image: postgres:15-alpine
+    # Optimasi postgres untuk resources terbatas
     command: postgres -c 'shared_buffers=64MB' -c 'max_connections=50'
     deploy:
       resources:
@@ -37,7 +34,7 @@ services:
 networks:
   caddy_net_external:
     external: true
-    name: caddy_net
+    name: caddy_net # Ini harus sama dengan network yang dipakai nginx-proxy
 
 volumes:
   postgres-data-prod:
