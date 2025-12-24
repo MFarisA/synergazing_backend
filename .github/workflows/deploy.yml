@@ -1,20 +1,23 @@
-name: Deploy to GCP
+name: Dev Backend Deploy
 
 on:
   push:
     branches:
-      - main
+      - dev-backend
+  workflow_dispatch:
 
 jobs:
-  deploy:
+  deploy-dev:
     runs-on: self-hosted
 
     steps:
       - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Rebuild and Deploy Application
+      - name: Sync and Deploy
         run: |
-          cd /home/rebbeca/synergazing/synergazing_backend
-          sudo docker compose down
-          sudo docker compose up --build -d
+          cd /root/development/synergazing_backend
+          git pull origin dev-backend
+          sudo docker compose -f docker-compose.dev.yml down
+          sudo docker compose -f docker-compose.dev.yml up --build -d
+          sudo docker image prune -f
