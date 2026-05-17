@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Go Application
+  synergazing-app:
+    build:
+      context: .
+      dockerfile: docker-go/Dockerfile 
+    container_name: synergazing-app
+    restart: always
+    ports:
+      - "8002:8080"
+    environment:
+      - DB_HOST=synergazing-db
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=5432 
+    networks:
+      - synergazing-network
+    depends_on:
+      - synergazing-db
+
+  synergazing-db:
+    image: postgres:14-alpine
+    container_name: synergazing-db
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "54321:5432"
+    volumes:
+      - synergazing-pgdata:/var/lib/postgresql/data
+    networks:
+      - synergazing-network
+
+networks:
+  synergazing-network:
+    driver: bridge
+
+volumes:
+  synergazing-pgdata:
