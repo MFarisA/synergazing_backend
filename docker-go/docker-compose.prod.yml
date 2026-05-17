@@ -9,7 +9,7 @@ services:
     container_name: synergazing-app
     restart: always
     ports:
-      - "8002:8080"
+      - "8002:3002"
     environment:
       - DB_HOST=synergazing-db
       - DB_USER=${DB_USER}
