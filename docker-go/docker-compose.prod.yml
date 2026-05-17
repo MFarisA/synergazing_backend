@@ -25,10 +25,10 @@ services:
 
   synergazing-db:
     image: postgres:14-alpine
-    con_file:
-      - ../.env
-    envtainer_name: synergazing-db
+    container_name: synergazing-db
     restart: always
+    env_file:
+      - ../.env
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
