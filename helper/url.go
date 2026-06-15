@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+	"strings"
 )
 
 // GetFrontendURL returns the frontend URL for redirects with fallback logic
@@ -11,6 +12,12 @@ func GetFrontendURL() string {
 	// First try to get FRONTEND_URL from environment
 	frontendURL := os.Getenv("FRONTEND_URL")
 	if frontendURL != "" {
+		if strings.Contains(frontendURL, ",") {
+			parts := strings.Split(frontendURL, ",")
+			if len(parts) > 0 {
+				return strings.TrimSpace(parts[0])
+			}
+		}
 		return frontendURL
 	}
 

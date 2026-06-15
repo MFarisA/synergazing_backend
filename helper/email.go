@@ -14,7 +14,7 @@ func SendPasswordResetEmail(email, token string) {
 	emailPortStr := os.Getenv("EMAIL_PORT")
 	emailUser := os.Getenv("EMAIL_USERNAME")
 	emailPass := os.Getenv("EMAIL_PASSWORD")
-	frontendURL := os.Getenv("FRONTEND_URL")
+	frontendURL := GetFrontendURL()
 
 	emailPort, err := strconv.Atoi(emailPortStr)
 	if err != nil {
