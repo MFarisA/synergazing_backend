@@ -21,6 +21,7 @@ COPY --from=builder /synergazing_backend .
 COPY .env .
 COPY Api.yml .
 COPY storage ./storage
+COPY picture-seeder ./picture-seeder
 
 EXPOSE 3002
 

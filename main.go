@@ -57,6 +57,10 @@ func main() {
 			log.Println("Cleaning up expired OTPs...")
 			migrations.CleanupExpiredOTPs(db)
 			return
+		case "seed":
+			log.Println("Running database seeder...")
+			migrations.SeedDatabase(db)
+			return
 		}
 	}
 
